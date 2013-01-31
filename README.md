@@ -1,5 +1,5 @@
 
-A Raphael Js DEMO to create a masking effect a HTML elemet
+A Raphael Js DEMO to create a image masking effect over a XHTML element
 
 Doesn't work in IE browsers.
 
