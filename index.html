@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+  <title>Raphael Test</title>
+  <style>
+html {
+  background: #CCC url(seamless1.png);
+  font-family: Arial, Helvetica, sans-serif;
+}
+.element {
+  width: 400px;
+  height: 300px;
+  overflow: hidden;
+  background: #36F;
+  color: #FFF;
+  -webkit-mask-image: url(mouse.png);
+}
+</style>
+</head>
+<body>
+  <div id="raphael"></div>
+  <script src="js/jquery-1.7.2.min.js"></script>
+  <script>window.jQuery || document.write('<script type="text/javascript" src="js/jquery-1.7.2.min.js"><\/script>')</script>
+  <script type="text/javascript" src="js/raphael.js"></script>
+  <script type="text/javascript">
+  $(document).ready(function() {
+
+    var raphael, path, mask;
+    raphael = Raphael(document.getElementById('raphael'), 500, 500);
+    Raphael.el.foreignobject = function () {
+      return document.createElement('foreignObject');
+    };
+    //path = raphael.circle(200, 200, 180);
+    //path = raphael.text(250, 200, "Raphaël\nkicks\nbutt!");
+    //path.attr('font-size','122');
+    //path.attr('stroke', '#000000');
+    //path.attr('stroke-width', 3);
+    //path.attr('stroke-opacity', 1);
+
+    var svgRoot = raphael.canvas;
+    var div_element = document.createElement('div');
+    div_element.setAttribute('class', 'element');
+
+    var p_element = document.createElement('p');
+    var txtNode = document.createTextNode('Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. ');
+
+
+
+    var foreignObject = document.createElementNS('http://www.w3.org/2000/svg', 'foreignObject');
+    foreignObject.setAttribute('style', 'mask: url(#mask);');
+    foreignObject.setAttribute('width', '100%');
+    foreignObject.setAttribute('height', '100%');
+
+    var mask = document.createElementNS('http://www.w3.org/2000/svg','mask');
+                      mask.setAttribute('id', 'mask');
+                      mask.setAttribute('maskContentUnits','userSpaceOnUse');
+                      mask.setAttribute('maskUnits', 'userSpaceOnUse');
+
+                      var mask_image = document.createElementNS('http://www.w3.org/2000/svg','image');
+                      mask_image.setAttribute('width', '400px');
+                      mask_image.setAttribute('height', '300px');
+                      mask_image.setAttributeNS('http://www.w3.org/1999/xlink','xlink:href', 'mouse.png');
+                      mask.appendChild(mask_image);
+                      raphael.defs.appendChild(mask);
+
+    p_element.appendChild(txtNode);
+    div_element.appendChild(p_element);
+    foreignObject.appendChild(div_element);
+    svgRoot.appendChild(foreignObject);
+
+
+    //path.attr('mask', 'url(http://3.bp.blogspot.com/_M4WdA9j-b-g/TLMF9JJJwcI/AAAAAAAAAV4/p0Y_Wo3S3sQ/s1600/Landscape1.jpg)');
+    //fo.attr('fill', 'url(http://3.bp.blogspot.com/_M4WdA9j-b-g/TLMF9JJJwcI/AAAAAAAAAV4/p0Y_Wo3S3sQ/s1600/Landscape1.jpg)');
+    //mask = $(path.node).attr('fill');
+    // mask = $(mask.node);
+    // if(mask) {
+    //   console.log("What the hell is mask", mask);
+    //   //mask = mask.replace('url(', '').replace(')', '');
+    //   console.log("What the hell is mask", mask);
+    //   mask = $(mask);
+    // }
+
+                // Shape element documentation: http://msdn.microsoft.com/en-us/library/hh846327(v=vs.85).aspx#shape_element
+                // Fill element documentation: http://msdn.microsoft.com/en-us/library/bb229596(v=vs.85).aspx
+
+                setTimeout(function() {
+                    if(Raphael.vml) { // SVG not supported (IE7 & IE8) and it doesn't work :/
+
+                      var html = $(path.node).html();
+                        html = html.replace(/rvml:/g, ''); // remove prefix
+                        html = html.replace(/ = /g, '=');
+                        html = html.substr(html.indexOf('/>') + 2); // remove xml element
+
+                        var src = '';
+                        $(html).each(function() {
+                          if($(this).prop("tagName") == 'FILL') {
+                            src = $(this).attr('src');
+                          }
+                        });
+
+                        if(src != '') {
+                          var html = $(path.node).html();
+                          html = html.replace(src, src + '" size="50,50');
+                          $(path.node).html(html);
+                          path.attr('stroke', '#000000');
+                          path.attr('stroke-width', 3);
+                          path.attr('stroke-opacity', 1);
+                        }
+                      }
+                    else { // SVG supported and it prints correct URL
+
+                      //$(mask)[0].setAttribute('width', 50);
+                      //$(mask)[0].setAttribute('height', 50);
+                      //$(mask).find('image')[0].setAttribute('width', 50);
+                      //$(mask).find('image')[0].setAttribute('height', 50);
+                      //$(mask).find('image')[0].setAttribute('preserveAspectRatio', 'defer none meet');
+                    }
+                  }, 1000);
+});
+</script>
+
+</body>
+</html>
